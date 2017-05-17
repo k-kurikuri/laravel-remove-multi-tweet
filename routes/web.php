@@ -19,3 +19,4 @@ Route::get('/auth/twitter', 'Auth\AuthController@redirectToSocial');
 Route::get('/auth/twitter/callback', 'Auth\AuthController@socialCallback');
 
 Route::get('/twitter', 'TwitterController@index');
+Route::post('/twitter/remove', 'TwitterController@remove');

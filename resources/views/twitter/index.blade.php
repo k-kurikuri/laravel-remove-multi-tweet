@@ -5,7 +5,8 @@
 @section('content')
     <h2 id="table-head-options">Tweet一覧 (一度に200件表示します)</h2>
 
-    <form method="get" action="/twitter">
+    <form method="post" action="/twitter/remove">
+        {{ csrf_field() }}
         <div class="form-group">
         <table class="table">
           <thead class="thead-inverse">
@@ -21,7 +22,7 @@
               <th scope="row">{{ $timeLine->id }}</th>
               <td>{{ $timeLine->text }}</td>
               <td>
-                  <input type="checkbox" name="tweetIds" valud="{{ $timeLine->id }}" class="form-check-input" />
+                  <input type="checkbox" name="tweetIds[]" value="{{ $timeLine->id }}" class="form-check-input" />
               </td>
             </tr>
             @endforeach
