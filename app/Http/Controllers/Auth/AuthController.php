@@ -2,22 +2,23 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Abraham\TwitterOAuth\TwitterOAuth;
-use Socialite;
+use Laravel\Socialite\Facades\Socialite;
 
+/**
+ * Class AuthController
+ * @package App\Http\Controllers\Auth
+ */
 class AuthController extends Controller
 {
     /**
      * twitter OAuth authenticate
-     *
-     * @return Response
+     * @return mixed
      */
     public function redirectToSocial()
     {
         $twitter = app('twitter.api');
-        $response = $twitter->oauth('oauth/request_token', array('oauth_callback' => env('TWITTER_CALLBACK')));
+        $response = $twitter->oauth('oauth/request_token', ['oauth_callback' => env('TWITTER_CALLBACK')]);
 
         session(['TWITTER_ACCESS_TOKEN_SECRET' => $response['oauth_token_secret']]);
 
@@ -26,15 +27,14 @@ class AuthController extends Controller
 
     /**
      * twitter OAuth Callback redirect
-     *
-     * @return Response
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function socialCallback()
     {
-        $outhToken = request()->get('oauth_token');
+        $oAuthToken = request()->get('oauth_token');
         $oAuthVerifier = request()->get('oauth_verifier');
 
-        $accessToken = $outhToken;
+        $accessToken = $oAuthToken;
         $accessTokenSecret = session('TWITTER_ACCESS_TOKEN_SECRET');
 
         $twitter = app('twitter.api', [$accessToken, $accessTokenSecret]);

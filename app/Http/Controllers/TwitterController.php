@@ -2,14 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Abraham\TwitterOAuth\TwitterOAuth;
-
+/**
+ * Class TwitterController
+ * @package App\Http\Controllers
+ */
 class TwitterController extends Controller
 {
     /**
-     * 自身の投稿したタイムライン一覧を表示する
-     *
+     * timeline limit count
+     * @var int
+     */
+    const TIMELINE_LIMIT_COUNT = 200;
+
+    /**
+     * user tweet timeline list
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
     {
@@ -18,7 +25,7 @@ class TwitterController extends Controller
         ]);
 
         // ユーザーのTimelineの一覧取得 (max : 200)
-        $params = ['count' => 200,];
+        $params = ['count' => self::TIMELINE_LIMIT_COUNT,];
         if (request()->get('max_id')) {
             $params['max_id'] = request()->get('max_id');
         }
@@ -29,9 +36,8 @@ class TwitterController extends Controller
     }
 
     /**
-     * リクエストされた、つぶやきID削除API呼び出す
-     * 呼び出し後はindexアクションへとリダイレクトする
-     *
+     * destroy tweets by tweetIds
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function remove()
     {
@@ -48,6 +54,6 @@ class TwitterController extends Controller
             $maxId = $tweetId;
         }
 
-         return redirect()->action('TwitterController@index', ['max_id' => $tweetId]);
+         return redirect()->action('TwitterController@index', ['max_id' => $maxId]);
     }
 }
